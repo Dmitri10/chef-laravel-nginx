@@ -1,0 +1,43 @@
+# laravel.conf
+#
+# Contains a common configuration for use by nginx on a Laravel
+# installation. This file should be included in any Laravel site
+# nginx config with the following line:
+#
+#   include      /etc/nginx/laravel.conf;
+#
+
+# Based on blog post by Dayle Rees http://daylerees.com/nginx-configuration-for-daylerees-dot-com
+
+# Rewrite for content.
+if (!-d $request_filename) {
+  rewrite ^/(.+)/$ /$1 permanent;
+}
+
+location ~* \.php$ {
+  <% if node['nginx']['client_max_body_size'] -%>
+    client_max_body_size          <%= node['nginx']['client_max_body_size'] %>;
+  <% end -%>
+
+  # Use the upstream for php5-fpm that we defined in nginx.conf
+  fastcgi_pass                    unix:<%= node['laravel_nginx']['php_fpm']['listen'] %>;
+
+  # Set directory index
+  fastcgi_index                   index.php;
+
+  # Set correct path info
+  fastcgi_split_path_info         ^(.+\.php)(.*)$;
+
+  # Typical vars in here, nothing interesting.
+  include                         <%= node['nginx']['dir'] %>/fastcgi_params;
+  fastcgi_read_timeout            <%= node['laravel_nginx']['fastcgi_read_timeout'] %>;
+  fastcgi_param                   SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
+}
+
+location ~ /\. {
+  # Hells no, we usin nginx up in this mutha. (deny .htaccess)
+  access_log off;
+  log_not_found off;
+  deny all;
+}

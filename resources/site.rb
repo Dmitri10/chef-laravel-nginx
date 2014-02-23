@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: wordpress_nginx
+# Cookbook Name:: laravel_nginx
 # Resource:: site
 #
 

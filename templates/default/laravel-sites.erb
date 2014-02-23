@@ -4,10 +4,21 @@ server {
   root         <%= @root %>;
   access_log   <%= node['nginx']['log_dir'] %>/<%= @name %>.access.log;
   error_log    <%= node['nginx']['log_dir'] %>/<%= @name %>.error.log;
+  rewrite_log	 on;
+
+  # Image cache headers
+	location ~* \.(png|jpg|jpeg|gif)$ {
+		expires 30d;
+		log_not_found off;
+	}
+
+	location / {
+		try_files $uri $uri/ /index.php?$query_string;
+	}
 
   <% if @code -%>
   <%= @code %>
   <% end -%>
 
-  include <%= node['nginx']['dir'] %>/wordpress.conf;
+  include <%= node['nginx']['dir'] %>/laravel.conf;
 }

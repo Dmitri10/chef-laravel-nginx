@@ -1,23 +1,23 @@
 #
-# Cookbook Name:: wordpress_nginx
+# Cookbook Name:: laravel_nginx
 # Provider:: site
 #
 
 action :create do
-  template "#{node['nginx']['dir']}/wordpress.conf" do
-    source   'wordpress-common.erb'
+  template "#{node['nginx']['dir']}/laravel.conf" do
+    source   'laravel-common.erb'
     owner    'root'
     group    'root'
     mode     00644
-    cookbook 'wordpress-nginx'
+    cookbook 'laravel-nginx'
   end
 
   template "#{node['nginx']['dir']}/sites-available/#{new_resource.name}" do
-    source   'wordpress-sites.erb'
+    source   'laravel-sites.erb'
     owner    'root'
     group    'root'
     mode     00644
-    cookbook 'wordpress-nginx'
+    cookbook 'laravel-nginx'
     variables(
       :name => new_resource.name,
       :host => new_resource.host,
