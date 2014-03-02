@@ -1,6 +1,6 @@
 server {
   listen       80;
-  server_name  <%= @host %> <%= @host.sub! '.io', '.local' %>;
+  server_name  <%= @host %>;
   root         <%= @root %>;
   access_log   <%= node['nginx']['log_dir'] %>/<%= @name %>.access.log;
   error_log    <%= node['nginx']['log_dir'] %>/<%= @name %>.error.log;
