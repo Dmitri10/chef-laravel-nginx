@@ -5,6 +5,7 @@ server {
   access_log   <%= node['nginx']['log_dir'] %>/<%= @name %>.access.log;
   error_log    <%= node['nginx']['log_dir'] %>/<%= @name %>.error.log;
   rewrite_log	 on;
+  index        index.php;
 
   # Image cache headers
 	location ~* \.(png|jpg|jpeg|gif)$ {
