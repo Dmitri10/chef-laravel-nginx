@@ -1,21 +1,25 @@
+<% if @ssl_certificate && @ssl_certificate_key %>
 server {
-  listen       80;
+  listen       443;
+  ssl          on;
+  ssl_certificate        <%=@ssl_certificate%>;
+  ssl_certificate_key    <%=@ssl_certificate_key%>;
   server_name  <%= @host %>;
   root         <%= @root %>;
   access_log   <%= node['nginx']['log_dir'] %>/<%= @name %>.access.log;
   error_log    <%= node['nginx']['log_dir'] %>/<%= @name %>.error.log;
-  rewrite_log	 on;
+  rewrite_log  on;
   index        index.php;
 
   # Image cache headers
-	location ~* \.(png|jpg|jpeg|gif)$ {
-		expires 30d;
-		log_not_found off;
-	}
+  location ~* \.(png|jpg|jpeg|gif)$ {
+    expires 30d;
+    log_not_found off;
+  }
 
-	location / {
-		try_files $uri $uri/ /index.php?$query_string;
-	}
+  location / {
+    try_files $uri $uri/ /index.php?$query_string;
+  }
 
   <% if @code -%>
   <%= @code %>
@@ -23,3 +27,36 @@ server {
 
   include <%= node['nginx']['dir'] %>/laravel.conf;
 }
+
+server {
+  listen       80;
+  server_name  <%= @host %>;
+  rewrite     ^   https://$server_name$request_uri? permanent;
+}
+<% else %>
+server {
+  listen       80;
+  server_name  <%= @host %>;
+  root         <%= @root %>;
+  access_log   <%= node['nginx']['log_dir'] %>/<%= @name %>.access.log;
+  error_log    <%= node['nginx']['log_dir'] %>/<%= @name %>.error.log;
+  rewrite_log  on;
+  index        index.php;
+
+  # Image cache headers
+  location ~* \.(png|jpg|jpeg|gif)$ {
+    expires 30d;
+    log_not_found off;
+  }
+
+  location / {
+    try_files $uri $uri/ /index.php?$query_string;
+  }
+
+  <% if @code -%>
+  <%= @code %>
+  <% end -%>
+
+  include <%= node['nginx']['dir'] %>/laravel.conf;
+}
+<% end %>

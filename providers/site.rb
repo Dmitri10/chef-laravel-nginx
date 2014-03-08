@@ -22,7 +22,9 @@ action :create do
       :name => new_resource.name,
       :host => new_resource.host,
       :root => new_resource.root,
-      :code => new_resource.code
+      :code => new_resource.code,
+      :ssl_certificate => new_resource.ssl_certificate,
+      :ssl_certificate_key => new_resource.ssl_certificate_key
     )
   end
 
