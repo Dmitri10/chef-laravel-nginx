@@ -16,11 +16,13 @@ server {
   rewrite_log  on;
   index        index.php;
 
+  <% if @cache_images %>
   # Image cache headers
   location ~* \.(png|jpg|jpeg|gif)$ {
     expires 30d;
     log_not_found off;
   }
+  <% end %>
 
   location / {
     try_files $uri $uri/ /index.php?$query_string;
@@ -48,11 +50,13 @@ server {
   rewrite_log  on;
   index        index.php;
 
+  <% if @cache_images %>
   # Image cache headers
   location ~* \.(png|jpg|jpeg|gif)$ {
     expires 30d;
     log_not_found off;
   }
+  <% end %>
 
   location / {
     try_files $uri $uri/ /index.php?$query_string;
