@@ -12,5 +12,5 @@ attribute :root, :kind_of => String, :default => nil
 attribute :code, :kind_of => String, :default => nil
 attribute :ssl_certificate, :kind_of => String, :default => nil
 attribute :ssl_certificate_key, :kind_of => String, :default => nil
-attribute :cache_images, :kind_of => Boolean, :default => true
+attribute :cache_images, :kind_of => Bool, :default => true
 
