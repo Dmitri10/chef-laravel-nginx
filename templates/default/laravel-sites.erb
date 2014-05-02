@@ -42,7 +42,7 @@ server {
 }
 <% else %>
 server {
-  listen       80;
+  listen       80<% if @cache_images %> default_server<% end %>;
   server_name  <%= @host %>;
   root         <%= @root %>;
   access_log   <%= node['nginx']['log_dir'] %>/<%= @name %>.access.log;

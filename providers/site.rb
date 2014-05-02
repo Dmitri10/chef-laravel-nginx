@@ -26,6 +26,7 @@ action :create do
       :ssl_certificate => new_resource.ssl_certificate,
       :ssl_certificate_key => new_resource.ssl_certificate_key,
       :cache_images => new_resource.cache_images
+      :is_default => new_resource.is_default
     )
   end
 
