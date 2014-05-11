@@ -1,6 +1,6 @@
 <% if @ssl_certificate && @ssl_certificate_key %>
 server {
-  listen       443;
+  listen       443<% if @is_default %> default_server<% end %>;
   ssl          on;
   ssl_certificate        <%=@ssl_certificate%>;
   ssl_certificate_key    <%=@ssl_certificate_key%>;
@@ -36,13 +36,13 @@ server {
 }
 
 server {
-  listen       80;
+  listen       80<% if @is_default %> default_server<% end %>;
   server_name  <%= @host %>;
   rewrite     ^   https://$server_name$request_uri? permanent;
 }
 <% else %>
 server {
-  listen       80<% if @cache_images %> default_server<% end %>;
+  listen       80<% if @is_default %> default_server<% end %>;
   server_name  <%= @host %>;
   root         <%= @root %>;
   access_log   <%= node['nginx']['log_dir'] %>/<%= @name %>.access.log;
