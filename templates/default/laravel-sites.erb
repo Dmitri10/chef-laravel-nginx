@@ -36,9 +36,38 @@ server {
 }
 
 server {
+
+  <% if @force_ssl %>
   listen       80<% if @is_default %> default_server<% end %>;
   server_name  <%= @host %>;
   rewrite     ^   https://$server_name$request_uri? permanent;
+  <% else %>
+  listen       80<% if @is_default %> default_server<% end %>;
+  server_name  <%= @host %>;
+  root         <%= @root %>;
+  access_log   <%= node['nginx']['log_dir'] %>/<%= @name %>.access.log;
+  error_log    <%= node['nginx']['log_dir'] %>/<%= @name %>.error.log;
+  rewrite_log  on;
+  index        index.php;
+
+  <% if @cache_images %>
+  # Image cache headers
+  location ~* \.(png|jpg|jpeg|gif)$ {
+    expires 30d;
+    log_not_found off;
+  }
+  <% end %>
+
+  location / {
+    try_files $uri $uri/ /index.php?$query_string;
+  }
+
+  <% if @code -%>
+  <%= @code %>
+  <% end -%>
+
+  include <%= node['nginx']['dir'] %>/laravel.conf;
+  <% end %>
 }
 <% else %>
 server {
