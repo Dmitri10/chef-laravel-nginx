@@ -40,7 +40,7 @@ server {
   <% if @force_ssl %>
   listen       80<% if @is_default %> default_server<% end %>;
   server_name  <%= @host %>;
-  rewrite     ^   https://$server_name$request_uri? permanent;
+  rewrite     ^   https://$host$request_uri? permanent;
   <% else %>
   listen       80<% if @is_default %> default_server<% end %>;
   server_name  <%= @host %>;
