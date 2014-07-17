@@ -9,6 +9,7 @@ server {
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
   ssl_ciphers !aNULL:!eNULL:FIPS@STRENGTH;
   ssl_prefer_server_ciphers on;
+  fastcgi_param HTTPS on;
   server_name  <%= @host %>;
   root         <%= @root %>;
   access_log   <%= node['nginx']['log_dir'] %>/<%= @name %>.access.log;
